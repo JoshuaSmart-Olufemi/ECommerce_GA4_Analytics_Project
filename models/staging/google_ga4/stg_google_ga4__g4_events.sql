@@ -15,6 +15,7 @@ renamed as (
         , nested_params
         , user_pseudo_id
         , user_first_touch_timestamp
+        , NULL as revenue
         , traffic_source_medium
         , traffic_source_name
         , traffic_source_source
