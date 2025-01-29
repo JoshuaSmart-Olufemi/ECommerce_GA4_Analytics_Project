@@ -99,7 +99,17 @@ aggregated_fields AS (
         revenue
 )
 
-SELECT * 
+SELECT 
+    event_date
+    , event_timestamp
+    , event_name
+    , user_pseudo_id
+    , page_title
+    , user_first_touch_timestamp
+    , {{ remove_brackets('traffic_source_medium')}} as traffic_medium
+    , {{ remove_brackets('traffic_source_name')}} as traffic_source_name
+    , {{ remove_brackets('traffic_source_source')}} as traffic_source
+    , revenue 
 FROM aggregated_fields
 --where page_title is not null
 --user_pseudo_id = 1173058.1267899976    --4655360.668951162

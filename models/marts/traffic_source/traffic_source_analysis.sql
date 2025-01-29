@@ -8,8 +8,8 @@ with base as (
 
     select
     count(event_name) as page_view_cnt
-    , {{ remove_brackets('traffic_source_medium')}} as traffic_medium
-    , {{ remove_brackets('traffic_source_source')}} as traffic_source 
+    , traffic_medium
+    , traffic_source
     from base 
     where event_name = 'page_view'
     group by 2,3
