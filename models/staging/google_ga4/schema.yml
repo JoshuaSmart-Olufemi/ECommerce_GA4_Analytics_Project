@@ -1,0 +1,11 @@
+
+version: 2
+
+models:
+    - name: stg_event__json_extract
+      description: "base, staging model for data extracted from BQ GA4 data"
+      columns:
+          - name: user_oseudo_id
+            description: "The primary key for this table"
+
+
