@@ -87,7 +87,7 @@ aggregated_fields AS (
         MAX(percent_scrolled) AS percent_scrolled,
         MAX(debug_mode) AS debug_mode,
         user_first_touch_timestamp,
-        traffic_source_medium,
+        case when traffic_source_medium = '(none)' then null else traffic_source_medium end as traffic_source_medium,
         traffic_source_name,
         traffic_source_source,
         revenue
