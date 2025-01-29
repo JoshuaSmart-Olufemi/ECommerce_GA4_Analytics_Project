@@ -105,6 +105,7 @@ SELECT
     , event_name
     , user_pseudo_id
     , page_title
+    , percent_scrolled
     , user_first_touch_timestamp
     , {{ remove_brackets('traffic_source_medium')}} as traffic_medium
     , {{ remove_brackets('traffic_source_name')}} as traffic_source_name
