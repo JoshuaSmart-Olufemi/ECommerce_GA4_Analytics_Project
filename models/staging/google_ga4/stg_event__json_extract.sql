@@ -104,6 +104,7 @@ SELECT
     , event_timestamp
     , event_name
     , user_pseudo_id
+    , ga_session_id
     , page_title
     , percent_scrolled
     , user_first_touch_timestamp
