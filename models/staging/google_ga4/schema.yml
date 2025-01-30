@@ -5,7 +5,9 @@ models:
     - name: stg_event__json_extract
       description: "base, staging model for data extracted from BQ GA4 data"
       columns:
-          - name: user_oseudo_id
+          - name: user_pseudo_id
             description: "The primary key for this table"
+            tests: 
+              - not_null
 
 
