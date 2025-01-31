@@ -10,7 +10,7 @@ with base as (
 
 )
 
-, intermediate as (
+, final as (
 
     select
     traffic_medium
@@ -21,8 +21,9 @@ with base as (
     from base as b
     join event_steps as e 
     on b.event_timestamp = e.event_timestamp
+    where b.event_name IN ('view_item', 'add_shipping_info', 'add_payment_info')
     group by 1,2
     order by 1 desc
 )
 
-select * from intermediate
+select * from final
