@@ -4,16 +4,25 @@ with base as (
 
 )
 
-, traffic_sources as (
+, event_steps as (
+
+    select * from {{ ref('int_event_steps') }}
+
+)
+
+, intermediate as (
 
     select
-    count(event_name) as page_view_cnt
-    , traffic_medium
+    traffic_medium
     , traffic_source
-    from base 
-    where event_name = 'page_view'
-    group by 2,3
+    , count(distinct b.user_pseudo_id) as cnt_users
+    , count(case when funnel_step = 10 then b.user_pseudo_id end) as converted_users
+    , round(count(case when funnel_step = 10 then b.user_pseudo_id end) * 1.0 / count(distinct b.user_pseudo_id) , 2) as user_conversion_rate
+    from base as b
+    join event_steps as e 
+    on b.event_timestamp = e.event_timestamp
+    group by 1,2
     order by 1 desc
 )
 
-select * from traffic_sources
+select * from intermediate
