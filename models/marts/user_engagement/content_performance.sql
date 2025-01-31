@@ -4,15 +4,15 @@ with base as (
 
 )
 
-, scroll_analysis as (
+, most_viewed as (
 
     select
     page_title
-    , count(*) as scrolls_per_page_title_cnt
+    , count(*) as most_viewed_cnt
     from base 
-    where event_name = 'scroll' and page_title is not null
     group by 1 
     order by 2 desc 
 )
 
-select * from scroll_analysis
+select * from most_viewed
+where page_title is not null
