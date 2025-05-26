@@ -1,4 +1,4 @@
--- Initial commit for production branch
+-- testing base model for CI job trigger
 
 with 
 
