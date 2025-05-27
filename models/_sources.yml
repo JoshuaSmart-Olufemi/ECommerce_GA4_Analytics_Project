@@ -6,16 +6,12 @@ sources:
     schema: public # this is the schema our raw data lives in
     database: google # this is the name of our database
 
-    quoting:
-      database: false
-      schema: false
-      identifier: false
-
-    freshness:
-      warn_after: {count: 24, period: hour}
-      error_after: {count: 48, period: hour}
-
     tables:
       - name: g4_events
+        loaded_at_field: event_timestamp
+        config:
+          freshness:
+            warn_after: {count: 24, period: hour}
+            error_after: {count: 48, period: hour}
         description: >
           Contains GA4 google events data
