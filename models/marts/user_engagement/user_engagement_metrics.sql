@@ -23,9 +23,9 @@ with base as (
 -----     user_engangement_rate: 1.59%
 
     select 
-    concat(round(count_selected::numeric / count_viewed:: numeric , 2) , '%' ) as click_through_rate
-    , concat(round(count_viewed::numeric / count(b.event_date) ,2) , '%' ) as view_rate
-    , concat(round(count_user_engagement::numeric / count_scroll::numeric , 2) , '%') as user_engagement_rate
+    round(count_selected::numeric / count_viewed:: numeric , 2) as click_through_rate
+    , round(count_viewed::numeric / count(b.event_date) ,2) as view_rate
+    , round(count_user_engagement::numeric / count_scroll::numeric , 2) as user_engagement_rate
     from count_actions as ca
     join 
     base as b
