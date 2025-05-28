@@ -1,0 +1,62 @@
+version: 2
+
+models:
+  - name: content_performance
+    columns:
+      - name: page_title
+        description: "the page title"
+        meta:
+          dimension:
+            type: string
+
+      - name: most_viewed_cnt
+        meta:
+          dimension:
+            type: number
+
+  - name: user_behavior_transition_analysis
+    description: "Tracks user navigation steps"
+    columns:
+      - name: previous_event
+        description: "event before the current event"
+        meta:
+          dimension:
+            type: string
+
+      - name: event_name
+        description: "Name of the event (e.g. page_view, scroll)"
+        meta:
+          dimension:
+            type: string
+
+      - name: next_event
+        description: " event after current event"
+        meta:
+          dimension:
+            type: string
+
+      - name: transition_count
+        description: "Total amount of user transitions from all cohorts to each other"
+        meta:
+          dimension:
+            type: number
+
+  - name: user_engagement_metrics
+    description: " model for user engagement metrics"
+    columns:
+      - name: click_through_rate
+        description: "measures how many people who see a link or ad actually click on it. It indicates the effectiveness of your campaigns and how well they engage users"
+        meta: 
+          dimension:
+            type: number
+
+      - name: view_rate
+        description: ""
+        meta:
+          dimension:
+            type: number
+
+      - name: user_engagement_rate
+        meta:
+          dimension:
+            type: number

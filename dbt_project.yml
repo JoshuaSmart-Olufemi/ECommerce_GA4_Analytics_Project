@@ -43,3 +43,7 @@ models:
     
     marts:
       +materialized: table
+
+# Lightdash integration
+vars:
+  lightdash_project: true
