@@ -40,10 +40,88 @@ models:
     # Applies to all files under models/example/
     staging:
       +materialized: view
+      staging: 
+        +schema: staging
+        +tags: ["staging"]
     
     marts:
       +materialized: table
+      +schema: analytics
+    
+    seeds:
+      +schema: seed_data
+
+    tests:
+      +store_failures: true
 
 # Lightdash integration
 vars:
   lightdash_project: true
+
+
+    
+
+
+on-run-end: |
+  {% set run_status = 'success' %}  {# Default status #}
+  {% set run_end_time = modules.datetime.datetime.now() %}
+  
+ 
+  {# Initialize variables #}
+  {% set models_processed = [] %}
+  {% set rows_affected_dict = {} %}
+  {% set error_message = none %}
+  {% set run_status = invocation_status %}
+
+  {# Capture error message if run failed #}
+  {% if run_status == 'fail' %}
+    {% set error_result = results | selectattr('status', 'equalto', 'error') | list %}
+    {% if error_result %}
+      {% set error_message = error_result[0].message | replace("'", "''") %}
+    {% endif %}
+  {% endif %}
+
+  {# Process successful models to get row counts #}
+  {% if run_status == 'success' %}
+    {% for result in results %}
+      {% if result.status == 'success' and result.node.resource_type == 'model' %}
+        {% set full_table_name = result.node.schema ~ '.' ~ result.node.name %}
+        {% set row_count_query = 'SELECT COUNT(*) as row_count FROM ' ~ full_table_name %}
+       
+        {# Execute row count query safely #}
+        {% set row_count_result = run_query(row_count_query) %}
+        {% if row_count_result and row_count_result.rows %}
+          {% set rows_affected_dict = rows_affected_dict.update({result.node.name: row_count_result.rows[0][0]}) %}
+        {% endif %}
+       
+        {% do models_processed.append(result.node.name) %}
+      {% endif %}
+    {% endfor %}
+  {% endif %}
+
+  {# Insert into audit table #}
+  {% set audit_query %}
+    INSERT INTO audit.dbt_runs (
+      run_id, status, duration_seconds, models_updated,
+      rows_affected, error_message, dbt_version, target_name,
+      start_time, end_time
+    ) VALUES (
+      '{{ invocation_id }}',
+      '{{ run_status }}',
+      {{ invocation_time | default(0) }},
+      ARRAY[{{ "'" ~ models_processed | join("','") ~ "'" }}]::TEXT[],
+      '{{ tojson(rows_affected_dict) }}'::JSONB,
+      {% if error_message %}'{{ error_message }}'{% else %}NULL{% endif %},
+      '{{ version }}',
+      '{{ target.name }}',
+      '{{ run_start_time | default("1970-01-01 00:00:00") }}'::TIMESTAMPTZ,
+      '{{ run_end_time | default("1970-01-01 00:00:00") }}'::TIMESTAMPTZ
+
+    )
+  {% endset %}
+
+  {# Execute with error handling #}
+  {% do run_query(audit_query) %}
+  {{ log("Advanced audit log updated for run: " ~ invocation_id, info=true) }}
+
+  
