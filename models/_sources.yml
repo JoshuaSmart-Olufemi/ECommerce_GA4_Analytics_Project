@@ -15,3 +15,16 @@ sources:
             error_after: {count: 48, period: hour}
         description: >
           Contains GA4 google events data
+
+  - name: audit_dbt_runs
+    description: "audit log tracking dbt runs as a form of data obervability & monotiring"
+    schema: audit
+    tables:
+      - name: dbt_runs
+        description: 'Table that stores each dbt run and associated metadata'
+        columns:
+          - name: run_id
+            description: ' unique invocation ID'
+          - name: status
+            description: "success/fail status"
+
