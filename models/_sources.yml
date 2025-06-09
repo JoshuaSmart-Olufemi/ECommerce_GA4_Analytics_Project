@@ -25,6 +25,9 @@ sources:
         columns:
           - name: run_id
             description: ' unique invocation ID'
+            tests:
+              - not_null
+              - unique
           - name: status
             description: "success/fail status"
 
