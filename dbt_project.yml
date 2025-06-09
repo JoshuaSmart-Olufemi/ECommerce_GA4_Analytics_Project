@@ -40,9 +40,8 @@ models:
     # Applies to all files under models/example/
     staging:
       +materialized: view
-      staging: 
-        +schema: staging
-        +tags: ["staging"]
+      +schema: staging 
+      +tags: ["staging"]
     
     marts:
       +materialized: table
